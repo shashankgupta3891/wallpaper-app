@@ -4,6 +4,8 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:wallpaper_manager/wallpaper_manager.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class WallpaperPageView extends StatefulWidget {
   WallpaperPageView({this.pageNum, this.imageSrc});
@@ -15,6 +17,9 @@ class WallpaperPageView extends StatefulWidget {
 
 class _WallpaperPageViewState extends State<WallpaperPageView> {
   PageController _pageController;
+  String imageLink;
+  String result;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -24,7 +29,6 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
 
   @override
   Widget build(BuildContext context) {
-    String imageLink;
     return Scaffold(
 //      appBar: AppBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -34,9 +38,17 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
         label: Row(
           children: <Widget>[
             IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                int location = WallpaperManager
+                    .HOME_SCREEN; // or location = WallpaperManager.LOCK_SCREEN;
+
+                var file = await DefaultCacheManager().getSingleFile(imageLink);
+
+                result = await WallpaperManager.setWallpaperFromFile(
+                    file.path, location);
+              },
               icon: Icon(
-                Icons.save,
+                Icons.wallpaper,
                 color: Colors.black,
               ),
             ),
@@ -64,11 +76,14 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
         ),
       ),
       body: PageView.builder(
+        onPageChanged: (pageNumber) {
+          imageLink = widget.imageSrc[pageNumber % widget.imageSrc.length];
+        },
         physics: BouncingScrollPhysics(),
         controller: _pageController,
 //        itemCount: 100,
         itemBuilder: (context, int index) {
-          imageLink = widget.imageSrc[index % widget.imageSrc.length];
+//          imageLink = widget.imageSrc[index % widget.imageSrc.length];
           return Image.network(
             widget.imageSrc[index % widget.imageSrc.length],
             fit: BoxFit.cover,

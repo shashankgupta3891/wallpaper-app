@@ -26,6 +26,7 @@ class _MyHomePageState extends State<MyHomePage> {
       "https://images.pexels.com/photos/4142982/pexels-photo-4142982.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
       "https://images.pexels.com/photos/3876435/pexels-photo-3876435.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
       "https://images.pexels.com/photos/2397645/pexels-photo-2397645.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "https://images.pexels.com/photos/3693856/pexels-photo-3693856.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
     ];
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -44,17 +45,17 @@ class _MyHomePageState extends State<MyHomePage> {
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[
-//          SliverAppBar(
-////            pinned: true,
-//            backgroundColor: Colors.white,
-//            title: Text("hellp"),
-//            floating: true,
-//            expandedHeight: 200,
-//            flexibleSpace: FlexibleSpaceBar(
-//                background: Container(
-//              color: Colors.grey,
-//            )),
-//          ),
+          SliverAppBar(
+//            pinned: true,
+            backgroundColor: Colors.white,
+            title: Text("hellp"),
+            floating: true,
+            expandedHeight: 200,
+            flexibleSpace: FlexibleSpaceBar(
+                background: Container(
+              color: Colors.grey,
+            )),
+          ),
           SliverGrid(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
