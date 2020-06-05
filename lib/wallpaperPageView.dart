@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
@@ -19,12 +20,14 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
   PageController _pageController;
   String imageLink;
   String result;
+  bool isLoading = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _pageController = PageController(initialPage: widget.pageNum);
+    imageLink = widget.imageSrc[widget.pageNum % widget.imageSrc.length];
   }
 
   @override
@@ -39,13 +42,7 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
           children: <Widget>[
             IconButton(
               onPressed: () async {
-                int location = WallpaperManager
-                    .HOME_SCREEN; // or location = WallpaperManager.LOCK_SCREEN;
-
-                var file = await DefaultCacheManager().getSingleFile(imageLink);
-
-                result = await WallpaperManager.setWallpaperFromFile(
-                    file.path, location);
+                _settingModalBottomSheet(context);
               },
               icon: Icon(
                 Icons.wallpaper,
@@ -65,7 +62,8 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
                 var response = await request.close();
                 Uint8List bytes =
                     await consolidateHttpClientResponseBytes(response);
-                await Share.file('ESYS AMLOG', 'amlog.jpg', bytes, 'image/jpg');
+                await Share.file(
+                    'Image Share', 'WallpaperApp.jpg', bytes, 'image/jpg');
               },
               icon: Icon(
                 Icons.share,
@@ -88,11 +86,77 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
             widget.imageSrc[index % widget.imageSrc.length],
             fit: BoxFit.cover,
           );
-//          return Container(
-//            color: Colors.blue[(index * 100) % 1000],
-//          );
         },
       ),
+    );
+  }
+
+  void _settingModalBottomSheet(context) {
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      context: context,
+      builder: (BuildContext bc) {
+        return Wrap(
+          children: <Widget>[
+            ListTile(
+              title: Text('Home Screen'),
+              onTap: () async {
+                int location = WallpaperManager
+                    .HOME_SCREEN; // or location = WallpaperManager.LOCK_SCREEN;
+
+                var file = await DefaultCacheManager().getSingleFile(imageLink);
+
+                result = await WallpaperManager.setWallpaperFromFile(
+                  file.path,
+                  location,
+                );
+
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Lock Screen'),
+              onTap: () async {
+                int location = WallpaperManager
+                    .LOCK_SCREEN; // or location = WallpaperManager.LOCK_SCREEN;
+
+                var file = await DefaultCacheManager().getSingleFile(imageLink);
+
+                result = await WallpaperManager.setWallpaperFromFile(
+                  file.path,
+                  location,
+                );
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Both'),
+              onTap: () async {
+                int location = WallpaperManager.HOME_SCREEN;
+                int location2 = WallpaperManager
+                    .LOCK_SCREEN; // or location = WallpaperManager.LOCK_SCREEN;
+
+                var file = await DefaultCacheManager().getSingleFile(imageLink);
+
+                result = await WallpaperManager.setWallpaperFromFile(
+                  file.path,
+                  location,
+                );
+                result = await WallpaperManager.setWallpaperFromFile(
+                  file.path,
+                  location2,
+                );
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
