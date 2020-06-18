@@ -1,6 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../wallpaperPageView.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
+import 'likedImageScreen.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -12,89 +17,113 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String query = r"""query MyQuery {
+  posts {
+    nodes {
+      featuredImage {
+        sourceUrl(size: _2048X2048)
+        mediaItemUrl
+      }
+      title(format: RENDERED)
+    }
+  }
+}
+
+
+""";
+
   @override
   Widget build(BuildContext context) {
-    List<String> str = [
-      "https://images.pexels.com/photos/4389409/pexels-photo-4389409.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      "https://images.pexels.com/photos/3540104/pexels-photo-3540104.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      "https://images.pexels.com/photos/3922221/pexels-photo-3922221.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
-      "https://images.pexels.com/photos/3563888/pexels-photo-3563888.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      "https://images.pexels.com/photos/3290068/pexels-photo-3290068.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      "https://images.pexels.com/photos/3157693/pexels-photo-3157693.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      "https://images.pexels.com/photos/4207892/pexels-photo-4207892.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      "https://images.pexels.com/photos/2880507/pexels-photo-2880507.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      "https://images.pexels.com/photos/4142982/pexels-photo-4142982.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      "https://images.pexels.com/photos/3876435/pexels-photo-3876435.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      "https://images.pexels.com/photos/2397645/pexels-photo-2397645.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      "https://images.pexels.com/photos/3693856/pexels-photo-3693856.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-    ];
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.white,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LikedImageScreen()),
+          );
+        },
         label: Text(
-          "Invite",
+          "Liked",
           style: TextStyle(color: Colors.black),
         ),
         icon: Icon(
-          Icons.share,
-          color: Colors.black,
+          Icons.favorite,
+          color: Colors.pinkAccent,
         ),
       ),
-      body: CustomScrollView(
-        physics: BouncingScrollPhysics(),
-        slivers: <Widget>[
-          SliverAppBar(
+      body: Query(
+        options: QueryOptions(documentNode: gql(query)),
+        builder: (QueryResult result,
+            {VoidCallback refetch, FetchMore fetchMore}) {
+          if (result.data != null) {
+            List resultList = result.data['posts']['nodes'];
+            print(resultList[0]['featuredImage']['sourceUrl']);
+            return CustomScrollView(
+              physics: BouncingScrollPhysics(),
+              slivers: <Widget>[
+                SliverAppBar(
 //            pinned: true,
-            backgroundColor: Colors.white,
-            title: Text("hellp"),
-            floating: true,
-            expandedHeight: 200,
-            flexibleSpace: FlexibleSpaceBar(
-                background: Container(
-              color: Colors.grey,
-            )),
-          ),
-          SliverGrid(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.6,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => WallpaperPageView(
-                          pageNum: index,
-                          imageSrc: str,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Card(
-                      elevation: 5,
-                      clipBehavior: Clip.antiAlias,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      color: Colors.grey[(index * 100) % 1000],
-                      child: Image.network(
-                        str[index % str.length],
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                  backgroundColor: Colors.white,
+                  title: Text("hello"),
+                  floating: true,
+                  expandedHeight: 200,
+                  flexibleSpace: FlexibleSpaceBar(
+                      background: Container(
+                    color: Colors.grey,
+                  )),
+                ),
+                SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.6,
                   ),
-                );
-              },
-            ),
-          ),
-        ],
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () {
+                          print(result.data.toString());
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WallpaperPageView(
+                                pageNum: index,
+                                imageSrc: resultList,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Hero(
+                            tag: '$index',
+                            child: Card(
+                              elevation: 5,
+                              clipBehavior: Clip.antiAlias,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              color: Colors.grey[(index * 100) % 1000],
+                              child: Image.network(
+                                resultList[index % resultList.length]
+                                    ['featuredImage']['sourceUrl'],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
       ),
     );
   }

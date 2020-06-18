@@ -5,12 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:wallpaper_manager/wallpaper_manager.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'Model/likedImages.dart';
 
 class WallpaperPageView extends StatefulWidget {
   WallpaperPageView({this.pageNum, this.imageSrc});
-  final List<String> imageSrc;
+  final List<dynamic> imageSrc;
   final int pageNum;
   @override
   _WallpaperPageViewState createState() => _WallpaperPageViewState();
@@ -21,13 +23,16 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
   String imageLink;
   String result;
   bool isLoading = false;
+  bool heartIcon;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _pageController = PageController(initialPage: widget.pageNum);
-    imageLink = widget.imageSrc[widget.pageNum % widget.imageSrc.length];
+    imageLink = widget.imageSrc[widget.pageNum % widget.imageSrc.length]
+        ['featuredImage']['sourceUrl'];
+    heartIcon = likedImagesLinks.contains(imageLink);
   }
 
   @override
@@ -50,11 +55,21 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  if (!heartIcon) {
+                    likedImagesLinks.add(imageLink);
+                  } else {
+                    likedImagesLinks.remove(imageLink);
+                  }
+                  heartIcon = !heartIcon;
+                });
+              },
               icon: Icon(
-                Icons.favorite,
-                color: Colors.black,
+                heartIcon ? Icons.favorite : Icons.favorite_border,
               ),
+              color: heartIcon ? Colors.pinkAccent : Colors.black,
+              splashColor: !heartIcon ? Colors.pinkAccent[100] : null,
             ),
             IconButton(
               onPressed: () async {
@@ -73,20 +88,28 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
           ],
         ),
       ),
-      body: PageView.builder(
-        onPageChanged: (pageNumber) {
-          imageLink = widget.imageSrc[pageNumber % widget.imageSrc.length];
-        },
-        physics: BouncingScrollPhysics(),
-        controller: _pageController,
+      body: Hero(
+        tag: '${widget.pageNum}',
+        child: PageView.builder(
+          onPageChanged: (pageNumber) {
+            imageLink = widget.imageSrc[pageNumber % widget.imageSrc.length]
+                ['featuredImage']['sourceUrl'];
+            setState(() {
+              heartIcon = likedImagesLinks.contains(imageLink);
+            });
+          },
+          physics: BouncingScrollPhysics(),
+          controller: _pageController,
 //        itemCount: 100,
-        itemBuilder: (context, int index) {
+          itemBuilder: (context, int index) {
 //          imageLink = widget.imageSrc[index % widget.imageSrc.length];
-          return Image.network(
-            widget.imageSrc[index % widget.imageSrc.length],
-            fit: BoxFit.cover,
-          );
-        },
+            return Image.network(
+              widget.imageSrc[index % widget.imageSrc.length]['featuredImage']
+                  ['sourceUrl'],
+              fit: BoxFit.cover,
+            );
+          },
+        ),
       ),
     );
   }
