@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 import 'likedImageScreen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -31,6 +32,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 """;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _firebaseMessaging.getToken().then((token) => {print(token)});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +72,6 @@ class _MyHomePageState extends State<MyHomePage> {
               physics: BouncingScrollPhysics(),
               slivers: <Widget>[
                 SliverAppBar(
-//            pinned: true,
                   backgroundColor: Colors.white,
                   title: Text("hello"),
                   floating: true,

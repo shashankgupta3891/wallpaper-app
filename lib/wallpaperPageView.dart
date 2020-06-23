@@ -9,6 +9,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:wallpaper_manager/wallpaper_manager.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'Model/likedImages.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class WallpaperPageView extends StatefulWidget {
   WallpaperPageView({this.pageNum, this.imageSrc});
@@ -37,6 +38,7 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
 
   @override
   Widget build(BuildContext context) {
+    final ProgressDialog pr = ProgressDialog(context);
     return Scaffold(
 //      appBar: AppBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -47,7 +49,7 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
           children: <Widget>[
             IconButton(
               onPressed: () async {
-                _settingModalBottomSheet(context);
+                _settingModalBottomSheet(context, pr);
               },
               icon: Icon(
                 Icons.wallpaper,
@@ -73,12 +75,14 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
             ),
             IconButton(
               onPressed: () async {
+                await pr.show();
                 var request = await HttpClient().getUrl(Uri.parse(imageLink));
                 var response = await request.close();
                 Uint8List bytes =
                     await consolidateHttpClientResponseBytes(response);
                 await Share.file(
                     'Image Share', 'WallpaperApp.jpg', bytes, 'image/jpg');
+                await pr.hide();
               },
               icon: Icon(
                 Icons.share,
@@ -114,7 +118,7 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
     );
   }
 
-  void _settingModalBottomSheet(context) {
+  void _settingModalBottomSheet(context, ProgressDialog pr) {
     showModalBottomSheet(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -131,13 +135,14 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
               onTap: () async {
                 int location = WallpaperManager
                     .HOME_SCREEN; // or location = WallpaperManager.LOCK_SCREEN;
-
+                await pr.show();
                 var file = await DefaultCacheManager().getSingleFile(imageLink);
 
                 result = await WallpaperManager.setWallpaperFromFile(
                   file.path,
                   location,
                 );
+                await pr.hide();
 
                 Navigator.pop(context);
               },
@@ -147,13 +152,14 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
               onTap: () async {
                 int location = WallpaperManager
                     .LOCK_SCREEN; // or location = WallpaperManager.LOCK_SCREEN;
-
+                await pr.show();
                 var file = await DefaultCacheManager().getSingleFile(imageLink);
 
                 result = await WallpaperManager.setWallpaperFromFile(
                   file.path,
                   location,
                 );
+                await pr.hide();
                 Navigator.pop(context);
               },
             ),
@@ -163,7 +169,7 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
                 int location = WallpaperManager.HOME_SCREEN;
                 int location2 = WallpaperManager
                     .LOCK_SCREEN; // or location = WallpaperManager.LOCK_SCREEN;
-
+                await pr.show();
                 var file = await DefaultCacheManager().getSingleFile(imageLink);
 
                 result = await WallpaperManager.setWallpaperFromFile(
@@ -174,6 +180,8 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
                   file.path,
                   location2,
                 );
+                await pr.hide();
+
                 Navigator.pop(context);
               },
             ),

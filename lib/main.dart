@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'screens/home.dart';
+import 'screens/likedImageScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HttpLink httpLink = HttpLink(
-      uri: 'http://geetdemo.16mb.com/graphql/',
+      uri: 'https://interntojob.com/graphql/',
     );
 
     ValueNotifier<GraphQLClient> client = ValueNotifier(
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
       ),
       home: GraphQLProvider(
         client: client,
-        child: MyHomePage(title: 'Flutter Demo Home Page'),
+        child: CacheProvider(child: LikedImageScreen()),
       ),
     );
   }
