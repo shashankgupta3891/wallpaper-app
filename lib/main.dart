@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'screens/home.dart';
 import 'screens/likedImageScreen.dart';
+import 'screens/homeScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,12 +26,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
+        textTheme: GoogleFonts.openSansTextTheme(),
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: GraphQLProvider(
         client: client,
-        child: CacheProvider(child: LikedImageScreen()),
+        child: CacheProvider(child: HomeScreen()),
       ),
     );
   }

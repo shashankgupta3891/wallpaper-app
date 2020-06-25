@@ -10,11 +10,14 @@ import 'package:wallpaper_manager/wallpaper_manager.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'Model/likedImages.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class WallpaperPageView extends StatefulWidget {
-  WallpaperPageView({this.pageNum, this.imageSrc});
+  WallpaperPageView(
+      {this.pageNum, this.imageSrc, this.isLikedWallpaper = false});
   final List<dynamic> imageSrc;
   final int pageNum;
+  final bool isLikedWallpaper;
   @override
   _WallpaperPageViewState createState() => _WallpaperPageViewState();
 }
@@ -31,9 +34,14 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
     // TODO: implement initState
     super.initState();
     _pageController = PageController(initialPage: widget.pageNum);
-    imageLink = widget.imageSrc[widget.pageNum % widget.imageSrc.length]
-        ['featuredImage']['sourceUrl'];
-    heartIcon = likedImagesLinks.contains(imageLink);
+    if (widget.isLikedWallpaper) {
+      imageLink = widget.imageSrc[widget.pageNum % widget.imageSrc.length];
+    } else {
+      imageLink = widget.imageSrc[widget.pageNum % widget.imageSrc.length]
+          ['featuredImage']['sourceUrl'];
+    }
+
+    heartIcon = LikedImages.images.contains(imageLink);
   }
 
   @override
@@ -60,15 +68,17 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
               onPressed: () {
                 setState(() {
                   if (!heartIcon) {
-                    likedImagesLinks.add(imageLink);
+                    LikedImages.images.add(imageLink);
                   } else {
-                    likedImagesLinks.remove(imageLink);
+                    LikedImages.images.remove(imageLink);
                   }
                   heartIcon = !heartIcon;
                 });
               },
               icon: Icon(
-                heartIcon ? Icons.favorite : Icons.favorite_border,
+                heartIcon
+                    ? FontAwesomeIcons.solidHeart
+                    : FontAwesomeIcons.heart,
               ),
               color: heartIcon ? Colors.pinkAccent : Colors.black,
               splashColor: !heartIcon ? Colors.pinkAccent[100] : null,
@@ -96,10 +106,14 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
         tag: '${widget.pageNum}',
         child: PageView.builder(
           onPageChanged: (pageNumber) {
-            imageLink = widget.imageSrc[pageNumber % widget.imageSrc.length]
-                ['featuredImage']['sourceUrl'];
+            if (widget.isLikedWallpaper) {
+              imageLink = widget.imageSrc[pageNumber % widget.imageSrc.length];
+            } else {
+              imageLink = widget.imageSrc[pageNumber % widget.imageSrc.length]
+                  ['featuredImage']['sourceUrl'];
+            }
             setState(() {
-              heartIcon = likedImagesLinks.contains(imageLink);
+              heartIcon = LikedImages.images.contains(imageLink);
             });
           },
           physics: BouncingScrollPhysics(),
@@ -108,8 +122,10 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
           itemBuilder: (context, int index) {
 //          imageLink = widget.imageSrc[index % widget.imageSrc.length];
             return Image.network(
-              widget.imageSrc[index % widget.imageSrc.length]['featuredImage']
-                  ['sourceUrl'],
+              widget.isLikedWallpaper
+                  ? widget.imageSrc[index % widget.imageSrc.length]
+                  : widget.imageSrc[index % widget.imageSrc.length]
+                      ['featuredImage']['sourceUrl'],
               fit: BoxFit.cover,
             );
           },

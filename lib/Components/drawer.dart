@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CustomDrawer extends StatelessWidget {
   @override
@@ -26,16 +27,15 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: Text("Books"),
-            trailing: Icon(
-              Icons.book,
-              color: Colors.blueAccent,
-            ),
-          ),
+              title: Text("Books"),
+              trailing: Icon(
+                FontAwesomeIcons.book,
+                color: Colors.blueAccent,
+              )),
           ListTile(
             title: Text("Liked"),
             trailing: Icon(
-              Icons.favorite,
+              FontAwesomeIcons.solidHeart,
               color: Colors.pinkAccent,
             ),
           ),
