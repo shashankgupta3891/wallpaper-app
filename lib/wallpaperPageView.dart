@@ -29,16 +29,21 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
   bool isLoading = false;
   bool heartIcon;
 
+  List<dynamic> imageSrc;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    imageSrc = [
+      ...widget.imageSrc
+    ]; // Copy Data from widget.imageSrc to imageSrc
+
     _pageController = PageController(initialPage: widget.pageNum);
     if (widget.isLikedWallpaper) {
-      imageLink = widget.imageSrc[widget.pageNum % widget.imageSrc.length];
+      imageLink = imageSrc[widget.pageNum % imageSrc.length];
     } else {
-      imageLink = widget.imageSrc[widget.pageNum % widget.imageSrc.length]
-          ['featuredImage']['sourceUrl'];
+      imageLink = imageSrc[widget.pageNum % imageSrc.length]['featuredImage']
+          ['sourceUrl'];
     }
 
     heartIcon = LikedImages.images.contains(imageLink);
@@ -68,7 +73,7 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
               onPressed: () {
                 setState(() {
                   if (!heartIcon) {
-                    LikedImages.images.add(imageLink);
+                    LikedImages.images.insert(0, imageLink);
                   } else {
                     LikedImages.images.remove(imageLink);
                   }
@@ -107,9 +112,9 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
         child: PageView.builder(
           onPageChanged: (pageNumber) {
             if (widget.isLikedWallpaper) {
-              imageLink = widget.imageSrc[pageNumber % widget.imageSrc.length];
+              imageLink = imageSrc[pageNumber % imageSrc.length];
             } else {
-              imageLink = widget.imageSrc[pageNumber % widget.imageSrc.length]
+              imageLink = imageSrc[pageNumber % imageSrc.length]
                   ['featuredImage']['sourceUrl'];
             }
             setState(() {
@@ -118,14 +123,14 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
           },
           physics: BouncingScrollPhysics(),
           controller: _pageController,
-//        itemCount: 100,
+          itemCount: imageSrc.length,
           itemBuilder: (context, int index) {
 //          imageLink = widget.imageSrc[index % widget.imageSrc.length];
             return Image.network(
               widget.isLikedWallpaper
-                  ? widget.imageSrc[index % widget.imageSrc.length]
-                  : widget.imageSrc[index % widget.imageSrc.length]
-                      ['featuredImage']['sourceUrl'],
+                  ? imageSrc[index % imageSrc.length]
+                  : imageSrc[index % imageSrc.length]['featuredImage']
+                      ['sourceUrl'],
               fit: BoxFit.cover,
             );
           },
