@@ -12,6 +12,8 @@ import '../Components/homeScreenGrid.dart';
 import '../Components/productsScreenGrid.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 
+import 'package:hive/hive.dart';
+
 import 'likedImageScreen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -76,6 +78,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 sliver: SliverAppBar(
                   elevation: 10,
+                  actions: <Widget>[
+                    IconButton(
+                      onPressed: () {
+                        Hive.box('likedImg').deleteFromDisk();
+                      },
+                      icon: Icon(Icons.refresh),
+                    ),
+                  ],
 //                  expandedHeight: 100,
                   flexibleSpace: FlexibleSpaceBar(
                     background: Image.network(

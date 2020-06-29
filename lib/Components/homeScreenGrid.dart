@@ -19,6 +19,7 @@ class _HomeScreenGridState extends State<HomeScreenGrid> {
         mediaItemUrl
       }
       title(format: RENDERED)
+      id
     }
     pageInfo {
       endCursor

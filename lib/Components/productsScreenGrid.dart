@@ -18,6 +18,7 @@ class _ProductsScreenGridState extends State<ProductsScreenGrid> {
           mediaItemUrl
         }
         title(format: RENDERED)
+        id
       }
       pageInfo {
         endCursor

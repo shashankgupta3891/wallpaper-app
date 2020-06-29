@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -5,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:hive/hive.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:wallpaper_manager/wallpaper_manager.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -29,24 +31,37 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
   bool isLoading = false;
   bool heartIcon;
 
+  String id;
+
   List<dynamic> imageSrc;
+
+  Box likedImg;
+
+  String blurCode;
 
   @override
   void initState() {
     super.initState();
+
+    likedImg = Hive.box('likedImg');
+
     imageSrc = [
       ...widget.imageSrc
     ]; // Copy Data from widget.imageSrc to imageSrc
 
     _pageController = PageController(initialPage: widget.pageNum);
     if (widget.isLikedWallpaper) {
-      imageLink = imageSrc[widget.pageNum % imageSrc.length];
+      id = imageSrc[widget.pageNum % imageSrc.length]['id'];
+      blurCode = imageSrc[widget.pageNum % imageSrc.length]['blurStr'];
+      imageLink = imageSrc[widget.pageNum % imageSrc.length]['img'];
     } else {
+      id = imageSrc[widget.pageNum % imageSrc.length]['id'];
       imageLink = imageSrc[widget.pageNum % imageSrc.length]['featuredImage']
           ['sourceUrl'];
     }
 
     heartIcon = LikedImages.images.contains(imageLink);
+    heartIcon = likedImg.containsKey(id);
   }
 
   @override
@@ -73,9 +88,24 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
               onPressed: () {
                 setState(() {
                   if (!heartIcon) {
+                    likedImg.put(
+                      id,
+                      {
+                        'id': id,
+                        'img': imageLink,
+                        'blueStr': 'JANllQ0000?w00yE'
+                      },
+                    );
                     LikedImages.images.insert(0, imageLink);
                   } else {
                     LikedImages.images.remove(imageLink);
+                    print(likedImg.get(id));
+                    likedImg.delete(id);
+
+                    print(likedImg.get(id));
+
+                    print(id);
+                    print(likedImg.keys);
                   }
                   heartIcon = !heartIcon;
                 });
@@ -95,6 +125,7 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
                 var response = await request.close();
                 Uint8List bytes =
                     await consolidateHttpClientResponseBytes(response);
+
                 await Share.file(
                     'Image Share', 'WallpaperApp.jpg', bytes, 'image/jpg');
                 await pr.hide();
@@ -112,13 +143,17 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
         child: PageView.builder(
           onPageChanged: (pageNumber) {
             if (widget.isLikedWallpaper) {
-              imageLink = imageSrc[pageNumber % imageSrc.length];
+              id = imageSrc[pageNumber % imageSrc.length]['id'];
+              blurCode = imageSrc[pageNumber % imageSrc.length]['blurStr'];
+              imageLink = imageSrc[pageNumber % imageSrc.length]['img'];
             } else {
+              id = imageSrc[pageNumber % imageSrc.length]['id'];
               imageLink = imageSrc[pageNumber % imageSrc.length]
                   ['featuredImage']['sourceUrl'];
             }
             setState(() {
               heartIcon = LikedImages.images.contains(imageLink);
+              heartIcon = likedImg.containsKey(id);
             });
           },
           physics: BouncingScrollPhysics(),
@@ -128,7 +163,7 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
 //          imageLink = widget.imageSrc[index % widget.imageSrc.length];
             return Image.network(
               widget.isLikedWallpaper
-                  ? imageSrc[index % imageSrc.length]
+                  ? imageSrc[index % imageSrc.length]['img']
                   : imageSrc[index % imageSrc.length]['featuredImage']
                       ['sourceUrl'],
               fit: BoxFit.cover,
