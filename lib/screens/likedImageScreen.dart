@@ -1,19 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../wallpaperPageView.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-import 'dart:convert';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:shimmer/shimmer.dart';
-import 'homeScreen.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
-import 'dart:convert';
-
-import '../Model/likedImages.dart';
 
 class LikedImageScreen extends StatefulWidget {
   LikedImageScreen({Key key, this.title}) : super(key: key);
@@ -41,18 +31,15 @@ class _LikedImageScreenState extends State<LikedImageScreen> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.white,
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
-          );
+          likedImg.deleteAll(likedImg.keys.toList());
         },
         label: Text(
-          "Liked",
+          "Delete All",
           style: TextStyle(color: Colors.black),
         ),
         icon: Icon(
-          Icons.favorite,
-          color: Colors.pinkAccent,
+          Icons.cancel,
+          color: Colors.redAccent,
         ),
       ),
       body: ValueListenableBuilder(
@@ -64,13 +51,18 @@ class _LikedImageScreenState extends State<LikedImageScreen> {
             slivers: <Widget>[
               SliverAppBar(
                 backgroundColor: Colors.white,
-                title: Text("hello"),
+                title: Text("Liked Poster"),
                 floating: true,
                 expandedHeight: 200,
                 flexibleSpace: FlexibleSpaceBar(
-                    background: Container(
-                  color: Colors.grey,
-                )),
+                  background: Container(
+                    color: Colors.pinkAccent,
+                    child: Image.network(
+                      'https://images.pexels.com/photos/2045600/pexels-photo-2045600.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ),
+                ),
               ),
               SliverGrid(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -97,7 +89,7 @@ class _LikedImageScreenState extends State<LikedImageScreen> {
                       child: Padding(
                         padding: EdgeInsets.all(5.0),
                         child: Hero(
-                          tag: '$index',
+                          tag: 'l$index',
                           child: Card(
                             elevation: 5,
                             clipBehavior: Clip.antiAlias,

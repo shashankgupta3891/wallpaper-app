@@ -1,12 +1,14 @@
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
-import 'screens/likedImageScreen.dart';
 import 'screens/homeScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'screens/demoHomeScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +20,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     final HttpLink httpLink = HttpLink(
@@ -32,7 +35,7 @@ class MyApp extends StatelessWidget {
     );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Wallpaper App',
       theme: ThemeData(
         textTheme: GoogleFonts.openSansTextTheme(),
         primarySwatch: Colors.blue,
@@ -40,7 +43,7 @@ class MyApp extends StatelessWidget {
       ),
       home: GraphQLProvider(
         client: client,
-        child: CacheProvider(child: HomeScreen()),
+        child: CacheProvider(child: DemoHomeScreen()),
       ),
     );
   }

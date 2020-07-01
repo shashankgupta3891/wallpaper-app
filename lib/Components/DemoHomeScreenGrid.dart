@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-
 import '../wallpaperPageView.dart';
+import '../constants.dart';
 
-class HomeScreenGrid extends StatefulWidget {
+class DemoHomeScreenGrid extends StatefulWidget {
   @override
-  _HomeScreenGridState createState() => _HomeScreenGridState();
+  _DemoHomeScreenGridState createState() => _DemoHomeScreenGridState();
 }
 
-class _HomeScreenGridState extends State<HomeScreenGrid> {
+class _DemoHomeScreenGridState extends State<DemoHomeScreenGrid> {
   final String query = r"""query MyQuery ($First: Int!, $EndCursor: String!){
   posts(first: $First, after: $EndCursor) {
     nodes {
@@ -100,13 +99,16 @@ class _HomeScreenGridState extends State<HomeScreenGrid> {
             builder: (BuildContext context) {
               return CustomScrollView(
                 controller: scrollController,
-                physics: BouncingScrollPhysics(),
+//                physics: BouncingScrollPhysics(),
                 slivers: <Widget>[
                   SliverOverlapInjector(
                     // This is the flip side of the SliverOverlapAbsorber
                     // above.
                     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                         context),
+                  ),
+                  SliverPersistentHeader(
+                    delegate: SliverCustomAppBarDelegate(),
                   ),
                   SliverToBoxAdapter(
                     child: Container(
@@ -126,10 +128,14 @@ class _HomeScreenGridState extends State<HomeScreenGrid> {
                               Icon(
                                 FontAwesomeIcons.whatsapp,
                                 size: 40,
+                                color: Colors.white,
                               ),
                               Text(
                                 "Share to Whatsapp",
-                                style: TextStyle(fontSize: 20),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
                               ),
                             ],
                           ),
@@ -214,7 +220,7 @@ class SliverCustomAppBarDelegate extends SliverPersistentHeaderDelegate {
   double get minExtent => 10;
 
   @override
-  double get maxExtent => 20;
+  double get maxExtent => 10;
 
   @override
   Widget build(
@@ -223,10 +229,11 @@ class SliverCustomAppBarDelegate extends SliverPersistentHeaderDelegate {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
-          bottomRight: Radius.circular(20),
-          bottomLeft: Radius.circular(20),
+          bottomRight: Radius.circular(50),
+          bottomLeft: Radius.circular(50),
         ),
-        color: Colors.red,
+        gradient: CustomAppBarColor.appBarGradient,
+//        color: Color(0xff34495e),
       ),
     );
   }

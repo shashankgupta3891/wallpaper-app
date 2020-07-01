@@ -6,18 +6,22 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wallpaperapp/Components/drawer.dart';
 import '../Components/homeScreenGrid.dart';
 import '../Components/productsScreenGrid.dart';
+import '../Components/DemoHomeScreenGrid.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
+import '../constants.dart';
+
+import 'homeScreen.dart';
 
 import 'likedImageScreen.dart';
 
-class HomeScreen extends StatefulWidget {
+class DemoHomeScreen extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _DemoHomeScreenState createState() => _DemoHomeScreenState();
 }
 
 List<String> _tabs = ["hello", "Hwy", "jasjfa"];
 
-class _HomeScreenState extends State<HomeScreen> {
+class _DemoHomeScreenState extends State<DemoHomeScreen> {
   FirebaseMessaging firebaseMessaging = FirebaseMessaging();
 
   @override
@@ -25,9 +29,30 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     firebaseMessaging.configure(
-      onLaunch: (Map<String, dynamic> events) {},
-      onMessage: (Map<String, dynamic> events) {},
-      onResume: (Map<String, dynamic> events) {},
+      onLaunch: (Map<String, dynamic> events) {
+        return showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return SnackBar(
+                duration: Duration(seconds: 3),
+                content: Text('jellp1'),
+              );
+            });
+      },
+      onMessage: (Map<String, dynamic> events) {
+        print(events);
+        return;
+      },
+      onResume: (Map<String, dynamic> events) {
+        return showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return SnackBar(
+                duration: Duration(seconds: 3),
+                content: Text('jellp3'),
+              );
+            });
+      },
     );
 
     firebaseMessaging.requestNotificationPermissions(
@@ -91,21 +116,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
 //                  expandedHeight: 100,
                   flexibleSpace: FlexibleSpaceBar(
-                    background: Image.network(
-                      "https://images.pexels.com/photos/192136/pexels-photo-192136.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-                      fit: BoxFit.cover,
+                    background: Container(
+                      decoration: BoxDecoration(
+                        gradient: CustomAppBarColor.appBarGradient,
+                      ),
                     ),
+//                    background: Image.network(
+//                      "https://images.pexels.com/photos/192136/pexels-photo-192136.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+//                      fit: BoxFit.cover,
+//                    ),
                   ),
                   pinned: true,
                   floating: true,
-                  backgroundColor: Colors.lightGreen,
-                  title: Text("Hell"),
+                  title: Text("Demo"),
                   forceElevated: innerBoxIsScrolled,
+
                   bottom: TabBar(
+                    labelColor: Colors.black,
+                    unselectedLabelColor:
+                        CustomAppBarColor.unselectedLabelColor,
                     indicatorSize: TabBarIndicatorSize.tab,
                     indicator: BubbleTabIndicator(
                       indicatorHeight: 25.0,
-                      indicatorColor: Colors.blueAccent,
+                      indicatorColor: CustomAppBarColor.indicatorColor,
                       tabBarIndicatorSize: TabBarIndicatorSize.tab,
                     ),
                     tabs: <Tab>[
@@ -127,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
           body: TabBarView(
             physics: BouncingScrollPhysics(),
             children: <Widget>[
-              HomeScreenGrid(),
+              DemoHomeScreenGrid(),
               ProductsScreenGrid(),
               ProductsScreenGrid(),
             ],
@@ -135,5 +168,38 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+}
+
+class SliverCustomAppBarDelegate extends SliverPersistentHeaderDelegate {
+//  SliverCustomAppBarDelegate(this._tabBar);
+
+//  final TabBar _tabBar;
+//
+  @override
+  double get minExtent => 10;
+
+  @override
+  double get maxExtent => 20;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          bottomRight: Radius.circular(20),
+          bottomLeft: Radius.circular(20),
+        ),
+        gradient: CustomAppBarColor.appBarGradient,
+//        color: Color(0xff34495e),
+      ),
+    );
+  }
+
+  @override
+  bool shouldRebuild(SliverCustomAppBarDelegate oldDelegate) {
+    return false;
   }
 }

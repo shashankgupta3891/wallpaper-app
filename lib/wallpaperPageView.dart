@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -7,10 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:hive/hive.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:wallpaper_manager/wallpaper_manager.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'Model/likedImages.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -60,7 +57,6 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
           ['sourceUrl'];
     }
 
-    heartIcon = LikedImages.images.contains(imageLink);
     heartIcon = likedImg.containsKey(id);
   }
 
@@ -96,9 +92,7 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
                         'blueStr': 'JANllQ0000?w00yE'
                       },
                     );
-                    LikedImages.images.insert(0, imageLink);
                   } else {
-                    LikedImages.images.remove(imageLink);
                     print(likedImg.get(id));
                     likedImg.delete(id);
 
@@ -139,7 +133,9 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
         ),
       ),
       body: Hero(
-        tag: '${widget.pageNum}',
+        tag: widget.isLikedWallpaper
+            ? 'l${widget.pageNum}'
+            : '${widget.pageNum}',
         child: PageView.builder(
           onPageChanged: (pageNumber) {
             if (widget.isLikedWallpaper) {
@@ -152,7 +148,6 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
                   ['featuredImage']['sourceUrl'];
             }
             setState(() {
-              heartIcon = LikedImages.images.contains(imageLink);
               heartIcon = likedImg.containsKey(id);
             });
           },
