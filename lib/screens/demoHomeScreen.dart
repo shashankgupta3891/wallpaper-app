@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,8 @@ import '../Components/homeScreenGrid.dart';
 import '../Components/productsScreenGrid.dart';
 import '../Components/DemoHomeScreenGrid.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
+import 'package:flutter_animator/flutter_animator.dart';
+
 import '../constants.dart';
 
 import 'homeScreen.dart';
@@ -22,21 +26,22 @@ class DemoHomeScreen extends StatefulWidget {
 List<String> _tabs = ["hello", "Hwy", "jasjfa"];
 
 class _DemoHomeScreenState extends State<DemoHomeScreen> {
+  GlobalKey<AnimatorWidgetState> _key;
   FirebaseMessaging firebaseMessaging = FirebaseMessaging();
-
+  bool isLoaded;
   @override
   void initState() {
+    isLoaded = false;
     super.initState();
 
     firebaseMessaging.configure(
       onLaunch: (Map<String, dynamic> events) {
+        print(events);
+
         return showModalBottomSheet(
             context: context,
             builder: (context) {
-              return SnackBar(
-                duration: Duration(seconds: 3),
-                content: Text('jellp1'),
-              );
+              return;
             });
       },
       onMessage: (Map<String, dynamic> events) {
@@ -44,13 +49,12 @@ class _DemoHomeScreenState extends State<DemoHomeScreen> {
         return;
       },
       onResume: (Map<String, dynamic> events) {
+        print(events);
+
         return showModalBottomSheet(
             context: context,
             builder: (context) {
-              return SnackBar(
-                duration: Duration(seconds: 3),
-                content: Text('jellp3'),
-              );
+              return;
             });
       },
     );
@@ -63,143 +67,145 @@ class _DemoHomeScreenState extends State<DemoHomeScreen> {
       ),
     );
     firebaseMessaging.getToken().then((msg) => {print(msg)});
+    set();
+
+    _key = GlobalKey<AnimatorWidgetState>();
+    Timer.periodic(Duration(seconds: 3), (timer) {
+      _key.currentState.forward();
+    });
+  }
+
+  set() async {
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      isLoaded = true;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      drawer: CustomDrawer(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-          backgroundColor: Colors.white,
-          onPressed: () {},
-          label: Row(
-            children: <Widget>[
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LikedImageScreen()),
-                  );
-                },
-                icon: Icon(
-                  FontAwesomeIcons.solidHeart,
-                  color: Colors.pinkAccent,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
-                  );
-                },
-                icon: Icon(
-                  FontAwesomeIcons.book,
-                  color: Colors.blueAccent,
-//                  size: 24,
-                ),
-              ),
-            ],
-          )),
-      body: DefaultTabController(
-        length: _tabs.length, // This is the number of tabs.
-        child: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              SliverOverlapAbsorber(
-                handle:
-                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                sliver: SliverAppBar(
-                  elevation: 10,
-
-//                  expandedHeight: 100,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Container(
-                      decoration: BoxDecoration(
-                        gradient: CustomAppBarColor.appBarGradient,
+    return isLoaded
+        ? Scaffold(
+            backgroundColor: Colors.white,
+            drawer: CustomDrawer(),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: FloatingActionButton.extended(
+                backgroundColor: Colors.white,
+                onPressed: () {},
+                label: Row(
+                  children: <Widget>[
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LikedImageScreen()),
+                        );
+                      },
+                      icon: Icon(
+                        FontAwesomeIcons.solidHeart,
+                        color: Colors.pinkAccent,
                       ),
                     ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                        );
+                      },
+                      icon: Icon(
+                        FontAwesomeIcons.book,
+                        color: Colors.blueAccent,
+//                  size: 24,
+                      ),
+                    ),
+                  ],
+                )),
+            body: DefaultTabController(
+              length: _tabs.length, // This is the number of tabs.
+              child: NestedScrollView(
+                headerSliverBuilder:
+                    (BuildContext context, bool innerBoxIsScrolled) {
+                  return <Widget>[
+                    SliverOverlapAbsorber(
+                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                          context),
+                      sliver: SliverAppBar(
+                        elevation: 10,
+
+//                  expandedHeight: 100,
+                        flexibleSpace: FlexibleSpaceBar(
+                          background: Container(
+                            decoration: BoxDecoration(
+                              gradient: CustomAppBarColor.appBarGradient,
+                            ),
+                          ),
 //                    background: Image.network(
 //                      "https://images.pexels.com/photos/192136/pexels-photo-192136.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
 //                      fit: BoxFit.cover,
 //                    ),
-                  ),
-                  pinned: true,
-                  floating: true,
-                  title: Text("Demo"),
-                  forceElevated: innerBoxIsScrolled,
+                        ),
+                        pinned: true,
+                        floating: true,
+                        centerTitle: true,
+                        title: Image.asset(
+                          'assets/customIcon.png',
+                          height: 50,
+                        ),
 
-                  bottom: TabBar(
-                    labelColor: Colors.black,
-                    unselectedLabelColor:
-                        CustomAppBarColor.unselectedLabelColor,
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    indicator: BubbleTabIndicator(
-                      indicatorHeight: 25.0,
-                      indicatorColor: CustomAppBarColor.indicatorColor,
-                      tabBarIndicatorSize: TabBarIndicatorSize.tab,
+                        actions: <Widget>[
+                          RubberBand(
+                              key: _key,
+                              child: IconButton(
+                                  onPressed: () {}, icon: Icon(Icons.share)))
+                        ],
+                        forceElevated: innerBoxIsScrolled,
+
+                        bottom: TabBar(
+                          labelColor: Colors.black,
+                          unselectedLabelColor:
+                              CustomAppBarColor.unselectedLabelColor,
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          indicator: BubbleTabIndicator(
+                            indicatorHeight: 25.0,
+                            indicatorColor: CustomAppBarColor.indicatorColor,
+                            tabBarIndicatorSize: TabBarIndicatorSize.tab,
+                          ),
+                          tabs: <Tab>[
+                            Tab(
+                              text: "All",
+                            ),
+                            Tab(
+                              text: "Products",
+                            ),
+                            Tab(
+                              text: "Motivation",
+                            )
+                          ],
+                        ),
+                      ),
                     ),
-                    tabs: <Tab>[
-                      Tab(
-                        text: "All",
-                      ),
-                      Tab(
-                        text: "Products",
-                      ),
-                      Tab(
-                        text: "Motivation",
-                      )
-                    ],
-                  ),
+                  ];
+                },
+                body: TabBarView(
+                  physics: BouncingScrollPhysics(),
+                  children: <Widget>[
+                    DemoHomeScreenGrid(),
+                    ProductsScreenGrid(),
+                    ProductsScreenGrid(),
+                  ],
                 ),
               ),
-            ];
-          },
-          body: TabBarView(
-            physics: BouncingScrollPhysics(),
-            children: <Widget>[
-              DemoHomeScreenGrid(),
-              ProductsScreenGrid(),
-              ProductsScreenGrid(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SliverCustomAppBarDelegate extends SliverPersistentHeaderDelegate {
-//  SliverCustomAppBarDelegate(this._tabBar);
-
-//  final TabBar _tabBar;
-//
-  @override
-  double get minExtent => 10;
-
-  @override
-  double get maxExtent => 20;
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-          bottomRight: Radius.circular(20),
-          bottomLeft: Radius.circular(20),
-        ),
-        gradient: CustomAppBarColor.appBarGradient,
-//        color: Color(0xff34495e),
-      ),
-    );
-  }
-
-  @override
-  bool shouldRebuild(SliverCustomAppBarDelegate oldDelegate) {
-    return false;
+            ),
+          )
+        : Container(
+            color: Colors.white,
+            child: Image.asset(
+              'assets/customIcon.png',
+              width: MediaQuery.of(context).size.width * 0.5,
+            ),
+          );
   }
 }

@@ -42,6 +42,14 @@ dependencies:
   hive: ^1.4.1+1
   hive_flutter: ^0.3.0+2
 
+  flutter_animator: ^2.0.9
+#  custom_splash: ^0.0.2
+
+#  flutter_zoom_drawer: ^1.0.4
+
+
+#  admob_flutter: ^0.3.4
+
 
 
 
@@ -56,6 +64,8 @@ dev_dependencies:
     sdk: flutter
   hive_generator:
   build_runner: ^1.10.0
+
+
 
   flutter_launcher_icons: ^0.7.5
 

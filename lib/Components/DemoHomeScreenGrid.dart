@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+
 import '../wallpaperPageView.dart';
 import '../constants.dart';
 
@@ -131,7 +132,7 @@ class _DemoHomeScreenGridState extends State<DemoHomeScreenGrid> {
                                 color: Colors.white,
                               ),
                               Text(
-                                "Share to Whatsapp",
+                                "Share on Whatsapp",
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.white,
