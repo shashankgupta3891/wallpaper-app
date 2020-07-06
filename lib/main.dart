@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
-import 'screens/homeScreen.dart';
+import 'screens/demoHomeScreen1.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'screens/demoHomeScreen.dart';
+import 'screens/homeScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
       ),
       home: GraphQLProvider(
         client: client,
-        child: CacheProvider(child: DemoHomeScreen()),
+        child: CacheProvider(child: HomeScreen()),
       ),
     );
   }
