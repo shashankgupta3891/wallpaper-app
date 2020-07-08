@@ -31,18 +31,21 @@ dependencies:
   flutter_cache_manager: "^1.1.3"
   graphql_flutter: ^3.0.0
   cached_network_image: ^2.2.0+1
-  shimmer: ^1.1.1
+#  shimmer: ^1.1.1
   firebase_messaging: ^6.0.16
   progress_dialog: ^1.2.4
   bubble_tab_indicator: "^0.1.4"
   font_awesome_flutter: ^8.8.1
   google_fonts: ^1.1.0
   path_provider: ^1.6.11
+  share: ^0.6.4+3
 
   hive: ^1.4.1+1
   hive_flutter: ^0.3.0+2
 
   flutter_animator: ^2.0.9
+
+  auto_size_text: ^2.1.0
 #  custom_splash: ^0.0.2
 
 #  flutter_zoom_drawer: ^1.0.4
