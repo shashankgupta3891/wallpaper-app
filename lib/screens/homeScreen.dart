@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wallpaperapp/Components/drawer.dart';
 import '../Components/productsScreenGrid.dart';
 import '../Components/DemoHomeScreenGrid.dart';
+import 'bookSection.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 
@@ -167,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DemoHomeScreen1()),
+                                builder: (context) => BookSectionScreen()),
                           );
                         },
                         icon: Icon(
@@ -205,9 +206,21 @@ class _HomeScreenState extends State<HomeScreen> {
                           pinned: true,
                           floating: true,
                           centerTitle: true,
-                          title: Image.asset(
-                            'assets/customIcon.png',
-                            height: 50,
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Image.asset(
+                                'assets/customIcon2.png',
+                                height: 26,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.02,
+                              ),
+                              Text(
+                                'Vestige Post',
+                                style: TextStyle(fontSize: 22),
+                              ),
+                            ],
                           ),
 
                           actions: <Widget>[
@@ -272,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Colors.white,
         child: Center(
           child: Image.asset(
-            'assets/customIcon.png',
+            'assets/customIcon2.png',
             width: MediaQuery.of(context).size.width * 0.5,
           ),
         ),
