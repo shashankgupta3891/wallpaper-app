@@ -7,7 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wallpaperapp/Components/drawer.dart';
 import '../Components/productsScreenGrid.dart';
-import '../Components/DemoHomeScreenGrid.dart';
+import '../Components/homeScreenGrid.dart';
 import 'bookSection.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter_animator/flutter_animator.dart';
@@ -267,7 +267,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   body: TabBarView(
                     physics: BouncingScrollPhysics(),
                     children: <Widget>[
-                      DemoHomeScreenGrid(),
+                      HomeScreenGrid(),
                       ProductsScreenGrid(),
                       ProductsScreenGrid(),
                     ],

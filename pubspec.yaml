@@ -47,6 +47,8 @@ dependencies:
 
   auto_size_text: ^2.1.0
   url_launcher: ^5.5.0
+
+  flutter_widget_from_html: ^0.3.2+2
 #  custom_splash: ^0.0.2
 
 #  flutter_zoom_drawer: ^1.0.4
