@@ -7,6 +7,8 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'screens/demoHomeScreen1.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:admob_flutter/admob_flutter.dart';
+import 'adUnit/adUnitId.dart';
 
 import 'screens/homeScreen.dart';
 
@@ -15,6 +17,7 @@ void main() async {
   Directory document = await getApplicationDocumentsDirectory();
   Hive.init(document.path);
   await Hive.openBox('likedImg');
+  Admob.initialize(getAppId());
   runApp(MyApp());
 }
 

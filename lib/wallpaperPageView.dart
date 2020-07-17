@@ -10,6 +10,8 @@ import 'package:wallpaper_manager/wallpaper_manager.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:admob_flutter/admob_flutter.dart';
+import 'adUnit/adUnitId.dart';
 
 class WallpaperPageView extends StatefulWidget {
   WallpaperPageView(
@@ -22,6 +24,7 @@ class WallpaperPageView extends StatefulWidget {
 }
 
 class _WallpaperPageViewState extends State<WallpaperPageView> {
+  AdmobBannerSize bannerSize;
   PageController _pageController;
   String imageLink;
   String result;
@@ -35,6 +38,8 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
   Box likedImg;
 
   String blurCode;
+
+  double bottomBannerAdSize = 60;
 
   @override
   void initState() {
@@ -58,113 +63,138 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
     }
 
     heartIcon = likedImg.containsKey(id);
+    bannerSize = AdmobBannerSize.BANNER;
   }
 
   @override
   Widget build(BuildContext context) {
     final ProgressDialog pr = ProgressDialog(context);
     return Scaffold(
+      body: Column(
+        children: <Widget>[
+          SizedBox(
+            height: MediaQuery.of(context).size.height - bottomBannerAdSize,
+            width: MediaQuery.of(context).size.width,
+            child: Scaffold(
 //      appBar: AppBar(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.white,
-        onPressed: () {},
-        label: Row(
-          children: <Widget>[
-            IconButton(
-              onPressed: () async {
-                _settingModalBottomSheet(context, pr);
-              },
-              icon: Icon(
-                Icons.wallpaper,
-                color: Colors.black,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  if (!heartIcon) {
-                    likedImg.put(
-                      id,
-                      {
-                        'id': id,
-                        'img': imageLink,
-                        'blueStr': 'JANllQ0000?w00yE'
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
+              floatingActionButton: FloatingActionButton.extended(
+                backgroundColor: Colors.white,
+                onPressed: () {},
+                label: Row(
+                  children: <Widget>[
+                    IconButton(
+                      onPressed: () async {
+                        _settingModalBottomSheet(context, pr);
                       },
-                    );
-                  } else {
-                    print(likedImg.get(id));
-                    likedImg.delete(id);
+                      icon: Icon(
+                        Icons.wallpaper,
+                        color: Colors.black,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          if (!heartIcon) {
+                            likedImg.put(
+                              id,
+                              {
+                                'id': id,
+                                'img': imageLink,
+                                'blueStr': 'JANllQ0000?w00yE'
+                              },
+                            );
+                          } else {
+                            print(likedImg.get(id));
+                            likedImg.delete(id);
 
-                    print(likedImg.get(id));
+                            print(likedImg.get(id));
 
-                    print(id);
-                    print(likedImg.keys);
-                  }
-                  heartIcon = !heartIcon;
-                });
-              },
-              icon: Icon(
-                heartIcon
-                    ? FontAwesomeIcons.solidHeart
-                    : FontAwesomeIcons.heart,
+                            print(id);
+                            print(likedImg.keys);
+                          }
+                          heartIcon = !heartIcon;
+                        });
+                      },
+                      icon: Icon(
+                        heartIcon
+                            ? FontAwesomeIcons.solidHeart
+                            : FontAwesomeIcons.heart,
+                      ),
+                      color: heartIcon ? Colors.pinkAccent : Colors.black,
+                      splashColor: !heartIcon ? Colors.pinkAccent[100] : null,
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        await pr.show();
+                        var request =
+                            await HttpClient().getUrl(Uri.parse(imageLink));
+                        var response = await request.close();
+                        Uint8List bytes =
+                            await consolidateHttpClientResponseBytes(response);
+
+                        await Share.file('Image Share', 'WallpaperApp.jpg',
+                            bytes, 'image/jpg');
+                        await pr.hide();
+                      },
+                      icon: Icon(
+                        Icons.share,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              color: heartIcon ? Colors.pinkAccent : Colors.black,
-              splashColor: !heartIcon ? Colors.pinkAccent[100] : null,
-            ),
-            IconButton(
-              onPressed: () async {
-                await pr.show();
-                var request = await HttpClient().getUrl(Uri.parse(imageLink));
-                var response = await request.close();
-                Uint8List bytes =
-                    await consolidateHttpClientResponseBytes(response);
-
-                await Share.file(
-                    'Image Share', 'WallpaperApp.jpg', bytes, 'image/jpg');
-                await pr.hide();
-              },
-              icon: Icon(
-                Icons.share,
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: Hero(
-        tag: widget.isLikedWallpaper
-            ? 'l${widget.pageNum}'
-            : '${widget.pageNum}',
-        child: PageView.builder(
-          onPageChanged: (pageNumber) {
-            if (widget.isLikedWallpaper) {
-              id = imageSrc[pageNumber % imageSrc.length]['id'];
-              blurCode = imageSrc[pageNumber % imageSrc.length]['blurStr'];
-              imageLink = imageSrc[pageNumber % imageSrc.length]['img'];
-            } else {
-              id = imageSrc[pageNumber % imageSrc.length]['id'];
-              imageLink = imageSrc[pageNumber % imageSrc.length]
-                  ['featuredImage']['sourceUrl'];
-            }
-            setState(() {
-              heartIcon = likedImg.containsKey(id);
-            });
-          },
-          physics: BouncingScrollPhysics(),
-          controller: _pageController,
-          itemCount: imageSrc.length,
-          itemBuilder: (context, int index) {
+              body: Hero(
+                tag: widget.isLikedWallpaper
+                    ? 'l${widget.pageNum}'
+                    : '${widget.pageNum}',
+                child: PageView.builder(
+                  onPageChanged: (pageNumber) {
+                    if (widget.isLikedWallpaper) {
+                      id = imageSrc[pageNumber % imageSrc.length]['id'];
+                      blurCode =
+                          imageSrc[pageNumber % imageSrc.length]['blurStr'];
+                      imageLink = imageSrc[pageNumber % imageSrc.length]['img'];
+                    } else {
+                      id = imageSrc[pageNumber % imageSrc.length]['id'];
+                      imageLink = imageSrc[pageNumber % imageSrc.length]
+                          ['featuredImage']['sourceUrl'];
+                    }
+                    setState(() {
+                      heartIcon = likedImg.containsKey(id);
+                    });
+                  },
+                  physics: BouncingScrollPhysics(),
+                  controller: _pageController,
+                  itemCount: imageSrc.length,
+                  itemBuilder: (context, int index) {
 //          imageLink = widget.imageSrc[index % widget.imageSrc.length];
-            return Image.network(
-              widget.isLikedWallpaper
-                  ? imageSrc[index % imageSrc.length]['img']
-                  : imageSrc[index % imageSrc.length]['featuredImage']
-                      ['sourceUrl'],
-              fit: BoxFit.cover,
-            );
-          },
-        ),
+                    return Image.network(
+                      widget.isLikedWallpaper
+                          ? imageSrc[index % imageSrc.length]['img']
+                          : imageSrc[index % imageSrc.length]['featuredImage']
+                              ['sourceUrl'],
+                      fit: BoxFit.cover,
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: bottomBannerAdSize,
+            width: MediaQuery.of(context).size.width,
+            child: AdmobBanner(
+              adUnitId: getBannerAdUnitId(),
+              adSize: bannerSize,
+              listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+//          handleEvent(event, args, 'Banner');
+              },
+            ),
+          )
+        ],
       ),
     );
   }
