@@ -67,7 +67,7 @@ class _LikedImageScreenState extends State<LikedImageScreen> {
               SliverGrid(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 0.6,
+                  childAspectRatio: 0.67,
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {

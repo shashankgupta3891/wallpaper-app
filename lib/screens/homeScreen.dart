@@ -225,16 +225,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           actions: <Widget>[
                             RubberBand(
-                                key: _key,
-                                child: IconButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  InviteScreen()));
-                                    },
-                                    icon: Icon(Icons.share)))
+                              key: _key,
+                              child: IconButton(
+//                                constraints: BoxConstraints(minHeight: 10),
+
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              InviteScreen()));
+                                },
+                                icon: Icon(Icons.share),
+                                color: Colors.yellowAccent,
+                              ),
+                            )
                           ],
                           forceElevated: innerBoxIsScrolled,
 
@@ -268,8 +273,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     physics: BouncingScrollPhysics(),
                     children: <Widget>[
                       HomeScreenGrid(),
-                      ProductsScreenGrid(),
-                      ProductsScreenGrid(),
+                      GridScreenByTagId(),
+                      GridScreenByTagId(),
                     ],
                   ),
                 ),

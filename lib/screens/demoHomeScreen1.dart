@@ -128,8 +128,8 @@ class _DemoHomeScreen1State extends State<DemoHomeScreen1> {
             physics: BouncingScrollPhysics(),
             children: <Widget>[
               DemoHomeScreenGrid1(),
-              ProductsScreenGrid(),
-              ProductsScreenGrid(),
+              GridScreenByTagId(),
+              GridScreenByTagId(),
             ],
           ),
         ),

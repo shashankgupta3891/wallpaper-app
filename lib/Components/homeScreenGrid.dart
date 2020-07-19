@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:admob_flutter/admob_flutter.dart';
+import '../adUnit/adUnitId.dart';
 
 import '../wallpaperPageView.dart';
+import '../bottomAdScaffold.dart';
 import '../constants.dart';
 
 class HomeScreenGrid extends StatefulWidget {
@@ -39,6 +42,8 @@ class _HomeScreenGridState extends State<HomeScreenGrid> {
 
   bool isLoading = false;
 
+  AdmobBannerSize bannerSize;
+
   @override
   void initState() {
     super.initState();
@@ -52,6 +57,8 @@ class _HomeScreenGridState extends State<HomeScreenGrid> {
         loadMore();
       }
     });
+
+    bannerSize = AdmobBannerSize.BANNER;
   }
 
   @override
@@ -147,7 +154,7 @@ class _HomeScreenGridState extends State<HomeScreenGrid> {
                   SliverGrid(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: 0.6,
+                      childAspectRatio: 0.67,
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
@@ -192,12 +199,40 @@ class _HomeScreenGridState extends State<HomeScreenGrid> {
                     ),
                   ),
                   SliverToBoxAdapter(
+                    child: Container(
+                      height: 150,
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.all(8),
+                      child: Card(
+                        elevation: 5,
+                        clipBehavior: Clip.antiAlias,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+//                        color: Colors.green,
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(
+                              height: 60,
+                              width: MediaQuery.of(context).size.width,
+                              child: AdmobBanner(
+                                adUnitId: getBannerAdUnitId(),
+                                adSize: bannerSize,
+                                listener: (AdmobAdEvent event,
+                                    Map<String, dynamic> args) {},
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
                     child: isContentAvailable
                         ? LinearProgressIndicator()
                         : Container(
-                            child: AlertDialog(
-                              title: Text("Nomoredata"),
-                            ),
+                            height: 0,
+                            width: 0,
                           ),
                   ),
                 ],

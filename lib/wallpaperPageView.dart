@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -24,7 +25,14 @@ class WallpaperPageView extends StatefulWidget {
 }
 
 class _WallpaperPageViewState extends State<WallpaperPageView> {
+  //Ads objects Declaration
   AdmobBannerSize bannerSize;
+  AdmobInterstitial interstitialAd;
+  Function showInterstitialAd;
+
+  //Random Numbers
+  Random _random;
+
   PageController _pageController;
   String imageLink;
   String result;
@@ -63,7 +71,28 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
     }
 
     heartIcon = likedImg.containsKey(id);
+
+    //Random number
+    _random = Random();
+
+    //Ad Initialization
     bannerSize = AdmobBannerSize.BANNER;
+    interstitialAd = AdmobInterstitial(
+      adUnitId: getInterstitialAdUnitId(),
+      listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+        if (event == AdmobAdEvent.closed) interstitialAd.load();
+      },
+    );
+    interstitialAd.load();
+    showInterstitialAd = () async {
+      if (await interstitialAd.isLoaded) {
+        int num = _random.nextInt(3);
+        if (num == 0) {
+          interstitialAd.show();
+        }
+        print(num);
+      }
+    };
   }
 
   @override
@@ -152,6 +181,8 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
                     : '${widget.pageNum}',
                 child: PageView.builder(
                   onPageChanged: (pageNumber) {
+                    //Calling InterstitialAd
+
                     if (widget.isLikedWallpaper) {
                       id = imageSrc[pageNumber % imageSrc.length]['id'];
                       blurCode =
@@ -165,6 +196,7 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
                     setState(() {
                       heartIcon = likedImg.containsKey(id);
                     });
+                    showInterstitialAd();
                   },
                   physics: BouncingScrollPhysics(),
                   controller: _pageController,
@@ -176,7 +208,7 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
                           ? imageSrc[index % imageSrc.length]['img']
                           : imageSrc[index % imageSrc.length]['featuredImage']
                               ['sourceUrl'],
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fitWidth,
                     );
                   },
                 ),

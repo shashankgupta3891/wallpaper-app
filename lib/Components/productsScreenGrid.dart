@@ -3,14 +3,15 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 
 import '../wallpaperPageView.dart';
 
-class ProductsScreenGrid extends StatefulWidget {
+class GridScreenByTagId extends StatefulWidget {
   @override
-  _ProductsScreenGridState createState() => _ProductsScreenGridState();
+  _GridScreenByTagIdState createState() => _GridScreenByTagIdState();
 }
 
-class _ProductsScreenGridState extends State<ProductsScreenGrid> {
-  final String query = r"""query MyQuery ($First: Int!, $EndCursor: String!){
-  tag(id: "cG9zdF90YWc6MTk3") {
+class _GridScreenByTagIdState extends State<GridScreenByTagId> {
+  final String query =
+      r"""query MyQuery ($First: Int!, $EndCursor: String!, $TagId: ID!){
+  tag(id: $TagId) {
     posts(first: $First, after: $EndCursor) {
       nodes {
         featuredImage {
@@ -69,7 +70,8 @@ class _ProductsScreenGridState extends State<ProductsScreenGrid> {
       },
       child: Query(
         options: QueryOptions(
-            documentNode: gql(query), variables: {"First": 8, "EndCursor": ""}),
+            documentNode: gql(query),
+            variables: {"First": 8, "EndCursor": "", "TagId": "dGVybToxOQ=="}),
         builder: (QueryResult result,
             {VoidCallback refetch, FetchMore fetchMore}) {
           if (result.data != null) {
@@ -124,7 +126,7 @@ class _ProductsScreenGridState extends State<ProductsScreenGrid> {
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        childAspectRatio: 0.6,
+                        childAspectRatio: 0.67,
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
