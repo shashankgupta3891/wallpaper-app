@@ -1,9 +1,17 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:wallpaperapp/adUnit/adUnitId.dart';
+import '../appBarCurvePart.dart';
 
 import '../wallpaperPageView.dart';
 
 class GridScreenByTagId extends StatefulWidget {
+  final String tagId;
+
+  GridScreenByTagId({this.tagId = "dGVybToxMw=="});
+
   @override
   _GridScreenByTagIdState createState() => _GridScreenByTagIdState();
 }
@@ -31,6 +39,8 @@ class _GridScreenByTagIdState extends State<GridScreenByTagId> {
 
 """;
 
+  AdmobBannerSize bannerSize;
+
   ScrollController scrollController;
 
   VoidCallback loadMore;
@@ -52,6 +62,7 @@ class _GridScreenByTagIdState extends State<GridScreenByTagId> {
         loadMore();
       }
     });
+    bannerSize = AdmobBannerSize.BANNER;
   }
 
   @override
@@ -71,7 +82,7 @@ class _GridScreenByTagIdState extends State<GridScreenByTagId> {
       child: Query(
         options: QueryOptions(
             documentNode: gql(query),
-            variables: {"First": 8, "EndCursor": "", "TagId": "dGVybToxOQ=="}),
+            variables: {"First": 8, "EndCursor": "", "TagId": widget.tagId}),
         builder: (QueryResult result,
             {VoidCallback refetch, FetchMore fetchMore}) {
           if (result.data != null) {
@@ -123,6 +134,42 @@ class _GridScreenByTagIdState extends State<GridScreenByTagId> {
                       handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                           context),
                     ),
+                    SliverPersistentHeader(
+                      delegate: SliverCustomAppBarDelegate(),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Container(
+                        padding: EdgeInsets.all(8),
+                        child: Card(
+                          elevation: 5,
+                          clipBehavior: Clip.antiAlias,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          color: Colors.green,
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                Icon(
+                                  FontAwesomeIcons.whatsapp,
+                                  size: 40,
+                                  color: Colors.white,
+                                ),
+                                Text(
+                                  "Share on Whatsapp",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                     SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
@@ -171,13 +218,42 @@ class _GridScreenByTagIdState extends State<GridScreenByTagId> {
                       ),
                     ),
                     SliverToBoxAdapter(
-                      child: FlatButton(
-                        onPressed: () {
-                          fetchMore(opts);
-                        },
-                        child: Text("Hellp"),
+                      child: Container(
+                        height: 150,
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.all(8),
+                        child: Card(
+                          elevation: 5,
+                          clipBehavior: Clip.antiAlias,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+//                        color: Colors.green,
+                          child: Column(
+                            children: <Widget>[
+                              SizedBox(
+                                height: 60,
+                                width: MediaQuery.of(context).size.width,
+                                child: AdmobBanner(
+                                  adUnitId: getBannerAdUnitId(),
+                                  adSize: bannerSize,
+                                  listener: (AdmobAdEvent event,
+                                      Map<String, dynamic> args) {},
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
+//                    SliverToBoxAdapter(
+//                      child: FlatButton(
+//                        onPressed: () {
+//                          fetchMore(opts);
+//                        },
+//                        child: Text("Hellp"),
+//                      ),
+//                    ),
                   ],
                 );
               },

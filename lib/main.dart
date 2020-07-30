@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
     );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Wallpaper App',
+      title: 'Vestige Post',
       theme: ThemeData(
         textTheme: GoogleFonts.openSansTextTheme(),
         primarySwatch: Colors.blue,

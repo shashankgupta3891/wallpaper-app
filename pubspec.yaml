@@ -70,6 +70,7 @@ dev_dependencies:
     sdk: flutter
   hive_generator:
   build_runner: ^1.10.0
+  change_app_package_name: ^0.1.2
 
 
 

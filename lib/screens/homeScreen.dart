@@ -273,8 +273,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     physics: BouncingScrollPhysics(),
                     children: <Widget>[
                       HomeScreenGrid(),
-                      GridScreenByTagId(),
-                      GridScreenByTagId(),
+                      GridScreenByTagId(
+                        tagId: "dGVybToxOQ==",
+                      ),
+                      GridScreenByTagId(
+                        tagId: "dGVybToxMw==",
+                      ),
                     ],
                   ),
                 ),
@@ -289,9 +293,25 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Container(
         color: Colors.white,
         child: Center(
-          child: Image.asset(
-            'assets/customIcon2.png',
-            width: MediaQuery.of(context).size.width * 0.5,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Vestige Post",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                  ),
+                ),
+              ),
+              Image.asset(
+                'assets/customIcon2.png',
+                width: MediaQuery.of(context).size.width * 0.5,
+              ),
+            ],
           ),
         ),
       ),
