@@ -23,7 +23,6 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-List<String> _tabs = ["All", "Food", "Nature", "Office", "Patterns"];
 enum HomePopupButtons { rateUs, likedPoster, invite, suggestion }
 
 class _HomeScreenState extends State<HomeScreen> {

@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -23,9 +22,6 @@ class WallpaperPageView extends StatefulWidget {
 }
 
 class _WallpaperPageViewState extends State<WallpaperPageView> {
-  //Random Numbers
-  Random _random;
-
   PageController _pageController;
   String imageLink;
   String result;
@@ -64,8 +60,6 @@ class _WallpaperPageViewState extends State<WallpaperPageView> {
     }
 
     heartIcon = likedImg.containsKey(id);
-
-    _random = Random();
   }
 
   @override
