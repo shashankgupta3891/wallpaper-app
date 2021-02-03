@@ -1,8 +1,7 @@
-import 'package:admob_flutter/admob_flutter.dart';
+// import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:wallpaperapp/adUnit/adUnitId.dart';
 import '../appBarCurvePart.dart';
 
 import '../wallpaperPageView.dart';
@@ -20,14 +19,16 @@ class _GridScreenByTagIdState extends State<GridScreenByTagId> {
   final String query =
       r"""query MyQuery ($First: Int!, $EndCursor: String!, $TagId: ID!){
   tag(id: $TagId) {
+    name
     posts(first: $First, after: $EndCursor) {
       nodes {
         featuredImage {
-          sourceUrl(size: _2048X2048)
-          mediaItemUrl
+          node {
+            sourceUrl
+          }
         }
-        title(format: RENDERED)
         id
+        title
       }
       pageInfo {
         endCursor
@@ -39,8 +40,6 @@ class _GridScreenByTagIdState extends State<GridScreenByTagId> {
 
 """;
 
-  AdmobBannerSize bannerSize;
-
   ScrollController scrollController;
 
   VoidCallback loadMore;
@@ -51,7 +50,6 @@ class _GridScreenByTagIdState extends State<GridScreenByTagId> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     scrollController = ScrollController();
     scrollController.addListener(() {
@@ -62,12 +60,10 @@ class _GridScreenByTagIdState extends State<GridScreenByTagId> {
         loadMore();
       }
     });
-    bannerSize = AdmobBannerSize.BANNER;
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     scrollController.dispose();
   }
@@ -75,7 +71,7 @@ class _GridScreenByTagIdState extends State<GridScreenByTagId> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      displacement: 150,
+      displacement: 300,
       onRefresh: () async {
         await Future.delayed(Duration(seconds: 3));
       },
@@ -206,7 +202,7 @@ class _GridScreenByTagIdState extends State<GridScreenByTagId> {
                                   color: Colors.grey[(index * 100) % 1000],
                                   child: Image.network(
                                     resultList[index % resultList.length]
-                                        ['featuredImage']['sourceUrl'],
+                                        ['featuredImage']['node']['sourceUrl'],
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -231,16 +227,16 @@ class _GridScreenByTagIdState extends State<GridScreenByTagId> {
 //                        color: Colors.green,
                           child: Column(
                             children: <Widget>[
-                              SizedBox(
-                                height: 60,
-                                width: MediaQuery.of(context).size.width,
-                                child: AdmobBanner(
-                                  adUnitId: getBannerAdUnitId(),
-                                  adSize: bannerSize,
-                                  listener: (AdmobAdEvent event,
-                                      Map<String, dynamic> args) {},
-                                ),
-                              ),
+                              // SizedBox(
+                              //   height: 60,
+                              //   width: MediaQuery.of(context).size.width,
+                              //   child: AdmobBanner(
+                              //     adUnitId: getBannerAdUnitId(),
+                              //     adSize: bannerSize,
+                              //     listener: (AdmobAdEvent event,
+                              //         Map<String, dynamic> args) {},
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),

@@ -6,15 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wallpaperapp/Components/drawer.dart';
-import '../Components/productsScreenGrid.dart';
-import '../Components/homeScreenGrid.dart';
-import 'bookSection.dart';
+import 'package:wallpaperapp/GraphQL/tabQueryWidget.dart';
+import '../Components/CustomScrollGrid/productsScreenGrid.dart';
+import '../Components/CustomScrollGrid/homeScreenGrid.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 
 import '../constants.dart';
-
-import 'demoHomeScreen1.dart';
 
 import 'likedImageScreen.dart';
 
@@ -25,7 +23,8 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-List<String> _tabs = ["hello", "Hwy", "jasjfa"];
+List<String> _tabs = ["All", "Food", "Nature", "Office", "Patterns"];
+enum HomePopupButtons { rateUs, likedPoster, invite, suggestion }
 
 class _HomeScreenState extends State<HomeScreen> {
   GlobalKey<AnimatorWidgetState> _key;
@@ -46,33 +45,35 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: <Widget>[
           RaisedButton(
-              elevation: 0,
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.blue),
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            elevation: 0,
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              side: BorderSide(color: Colors.blue),
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            ),
+            child: Text(
+              'Yes',
+              style: TextStyle(
+                color: Colors.blue,
+                fontWeight: FontWeight.bold,
               ),
-              child: Text(
-                'Yes',
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onPressed: () => Navigator.pop(context, true)),
+            ),
+            onPressed: () => Navigator.pop(context, true),
+          ),
           RaisedButton(
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            color: Colors.blue,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            ),
+            child: Text(
+              'No',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
-              child: Text(
-                'No',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onPressed: () => Navigator.pop(context, false)),
+            ),
+            onPressed: () => Navigator.pop(context, false),
+          ),
         ],
       ),
     );
@@ -163,125 +164,151 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.pinkAccent,
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BookSectionScreen()),
-                          );
-                        },
-                        icon: Icon(
-                          FontAwesomeIcons.book,
-                          color: Colors.blueAccent,
-//                  size: 24,
-                        ),
-                      ),
                     ],
                   )),
-              body: DefaultTabController(
-                length: _tabs.length, // This is the number of tabs.
-                child: NestedScrollView(
-                  headerSliverBuilder:
-                      (BuildContext context, bool innerBoxIsScrolled) {
-                    return <Widget>[
-                      SliverOverlapAbsorber(
-                        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                            context),
-                        sliver: SliverAppBar(
-                          elevation: 10,
+              body: TabsQueryWidget(
+                builder: (BuildContext context, resultData, _) {
+                  List _tabs = resultData;
+                  print("hello123 ${_tabs.length}");
 
-//                  expandedHeight: 100,
-                          flexibleSpace: FlexibleSpaceBar(
-                            background: Container(
-                              decoration: BoxDecoration(
-                                gradient: CustomAppBarColor.appBarGradient,
+                  return DefaultTabController(
+                    length: _tabs.length + 1, // This is the number of tabs.
+                    child: NestedScrollView(
+                      headerSliverBuilder:
+                          (BuildContext context, bool innerBoxIsScrolled) {
+                        return <Widget>[
+                          SliverOverlapAbsorber(
+                            handle:
+                                NestedScrollView.sliverOverlapAbsorberHandleFor(
+                                    context),
+                            sliver: SliverAppBar(
+                              elevation: 10,
+                              flexibleSpace: FlexibleSpaceBar(
+                                background: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: CustomAppBarColor.appBarGradient,
+                                  ),
+                                ),
                               ),
-                            ),
-//                    background: Image.network(
-//                      "https://images.pexels.com/photos/192136/pexels-photo-192136.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-//                      fit: BoxFit.cover,
-//                    ),
-                          ),
-                          pinned: true,
-                          floating: true,
-                          centerTitle: true,
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Image.asset(
-                                'assets/customIcon2.png',
-                                height: 26,
+                              pinned: true,
+                              floating: true,
+                              centerTitle: true,
+                              title: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Image.asset(
+                                    'assets/customIcon.png',
+                                    height: 40,
+                                  ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.02,
+                                  ),
+                                  Text(
+                                    'Wallpaper App',
+                                    style: TextStyle(fontSize: 22),
+                                  ),
+                                ],
                               ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.02,
-                              ),
-                              Text(
-                                'Vestige Post',
-                                style: TextStyle(fontSize: 22),
-                              ),
-                            ],
-                          ),
-
-                          actions: <Widget>[
-                            RubberBand(
-                              key: _key,
-                              child: IconButton(
-//                                constraints: BoxConstraints(minHeight: 10),
-
-                                onPressed: () {
-                                  Navigator.push(
+                              leading: PopupMenuButton<HomePopupButtons>(
+                                onSelected: (HomePopupButtons result) {
+                                  if (result == HomePopupButtons.likedPoster) {
+                                    Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              InviteScreen()));
+                                              LikedImageScreen()),
+                                    );
+                                  } else if (result ==
+                                      HomePopupButtons.invite) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                InviteScreen()));
+                                  } else if (result ==
+                                      HomePopupButtons.rateUs) {
+                                  } else if (result ==
+                                      HomePopupButtons.suggestion) {}
                                 },
-                                icon: Icon(Icons.share),
-                                color: Colors.yellowAccent,
+                                itemBuilder: (BuildContext context) =>
+                                    <PopupMenuEntry<HomePopupButtons>>[
+                                  PopupMenuItem<HomePopupButtons>(
+                                    value: HomePopupButtons.rateUs,
+                                    child: Text('Rate us'),
+                                  ),
+                                  PopupMenuItem<HomePopupButtons>(
+                                    value: HomePopupButtons.likedPoster,
+                                    child: Text('Liked Wallpapers'),
+                                  ),
+                                  PopupMenuItem<HomePopupButtons>(
+                                    value: HomePopupButtons.invite,
+                                    child: Text('Invite'),
+                                  ),
+                                  PopupMenuItem<HomePopupButtons>(
+                                    value: HomePopupButtons.suggestion,
+                                    child: Text('Suggestion'),
+                                  ),
+                                ],
                               ),
-                            )
-                          ],
-                          forceElevated: innerBoxIsScrolled,
-
-                          bottom: TabBar(
-                            labelColor: Colors.black,
-                            unselectedLabelColor:
-                                CustomAppBarColor.unselectedLabelColor,
-                            indicatorSize: TabBarIndicatorSize.tab,
-                            indicator: BubbleTabIndicator(
-                              indicatorHeight: 25.0,
-                              indicatorColor: CustomAppBarColor.indicatorColor,
-                              tabBarIndicatorSize: TabBarIndicatorSize.tab,
+                              actions: <Widget>[
+                                RubberBand(
+                                  key: _key,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  InviteScreen()));
+                                    },
+                                    icon: Icon(Icons.share),
+                                    color: Colors.yellowAccent,
+                                  ),
+                                )
+                              ],
+                              forceElevated: innerBoxIsScrolled,
+                              bottom: TabBar(
+                                isScrollable: true,
+                                labelColor: Colors.black,
+                                unselectedLabelColor:
+                                    CustomAppBarColor.unselectedLabelColor,
+                                indicatorSize: TabBarIndicatorSize.tab,
+                                indicator: BubbleTabIndicator(
+                                  indicatorHeight: 25.0,
+                                  indicatorColor:
+                                      CustomAppBarColor.indicatorColor,
+                                  tabBarIndicatorSize: TabBarIndicatorSize.tab,
+                                ),
+                                tabs: <Tab>[
+                                  Tab(
+                                    text: "All",
+                                  ),
+                                  ..._tabs
+                                      .map((e) => Tab(
+                                            text: e['name'],
+                                          ))
+                                      .toList()
+                                ],
+                              ),
                             ),
-                            tabs: <Tab>[
-                              Tab(
-                                text: "All",
-                              ),
-                              Tab(
-                                text: "Products",
-                              ),
-                              Tab(
-                                text: "Motivation",
-                              )
-                            ],
                           ),
-                        ),
+                        ];
+                      },
+                      body: TabBarView(
+                        physics: BouncingScrollPhysics(),
+                        children: <Widget>[
+                          HomeScreenGrid(),
+                          ..._tabs
+                              .map((e) => GridScreenByTagId(
+                                    tagId: e['id'],
+                                  ))
+                              .toList(),
+                        ],
                       ),
-                    ];
-                  },
-                  body: TabBarView(
-                    physics: BouncingScrollPhysics(),
-                    children: <Widget>[
-                      HomeScreenGrid(),
-                      GridScreenByTagId(
-                        tagId: "dGVybToxOQ==",
-                      ),
-                      GridScreenByTagId(
-                        tagId: "dGVybToxMw==",
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
             ),
           )
@@ -300,7 +327,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Vestige Post",
+                  "Wallpaper App",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 30,
@@ -308,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Image.asset(
-                'assets/customIcon2.png',
+                'assets/customIcon.png',
                 width: MediaQuery.of(context).size.width * 0.5,
               ),
             ],

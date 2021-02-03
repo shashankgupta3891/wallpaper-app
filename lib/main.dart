@@ -5,19 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
-import 'screens/demoHomeScreen1.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:admob_flutter/admob_flutter.dart';
-import 'adUnit/adUnitId.dart';
-
 import 'screens/homeScreen.dart';
+
+import 'config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Directory document = await getApplicationDocumentsDirectory();
   Hive.init(document.path);
   await Hive.openBox('likedImg');
-  Admob.initialize(getAppId());
+
   runApp(MyApp());
 }
 
@@ -27,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HttpLink httpLink = HttpLink(
-      uri: 'http://geetdemo.16mb.com/graphql',
+      uri: apiUrl,
     );
 
     ValueNotifier<GraphQLClient> client = ValueNotifier(
@@ -38,7 +36,7 @@ class MyApp extends StatelessWidget {
     );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Vestige Post',
+      title: 'Wallpaper App',
       theme: ThemeData(
         textTheme: GoogleFonts.openSansTextTheme(),
         primarySwatch: Colors.blue,

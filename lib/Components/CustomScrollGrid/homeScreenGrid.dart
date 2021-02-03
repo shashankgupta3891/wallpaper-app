@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:admob_flutter/admob_flutter.dart';
-import '../adUnit/adUnitId.dart';
 
 import '../wallpaperPageView.dart';
-import '../bottomAdScaffold.dart';
-import '../constants.dart';
 import '../appBarCurvePart.dart';
 
 class HomeScreenGrid extends StatefulWidget {
@@ -16,23 +12,24 @@ class HomeScreenGrid extends StatefulWidget {
 }
 
 class _HomeScreenGridState extends State<HomeScreenGrid> {
-  final String query = r"""query MyQuery ($First: Int!, $EndCursor: String!){
+  final String query = r"""query MyQuery($First: Int!, $EndCursor: String!) {
   posts(first: $First, after: $EndCursor) {
-    nodes {
-      featuredImage {
-        sourceUrl(size: _2048X2048)
-        mediaItemUrl
-      }
-      title(format: RENDERED)
-      id
-    }
     pageInfo {
       endCursor
       hasNextPage
     }
+    nodes {
+      featuredImage {
+        node {
+          sourceUrl
+          mediaItemUrl
+        }
+      }
+      title(format: RENDERED)
+      id
+    }
   }
 }
-
 """;
 
   ScrollController scrollController;
@@ -42,8 +39,6 @@ class _HomeScreenGridState extends State<HomeScreenGrid> {
   bool isContentAvailable = true;
 
   bool isLoading = false;
-
-  AdmobBannerSize bannerSize;
 
   @override
   void initState() {
@@ -58,8 +53,6 @@ class _HomeScreenGridState extends State<HomeScreenGrid> {
         loadMore();
       }
     });
-
-    bannerSize = AdmobBannerSize.BANNER;
   }
 
   @override
@@ -188,7 +181,7 @@ class _HomeScreenGridState extends State<HomeScreenGrid> {
                                 color: Colors.grey[(index * 100) % 1000],
                                 child: Image.network(
                                   resultList[index % resultList.length]
-                                      ['featuredImage']['sourceUrl'],
+                                      ['featuredImage']['node']['sourceUrl'],
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -213,16 +206,16 @@ class _HomeScreenGridState extends State<HomeScreenGrid> {
 //                        color: Colors.green,
                         child: Column(
                           children: <Widget>[
-                            SizedBox(
-                              height: 60,
-                              width: MediaQuery.of(context).size.width,
-                              child: AdmobBanner(
-                                adUnitId: getBannerAdUnitId(),
-                                adSize: bannerSize,
-                                listener: (AdmobAdEvent event,
-                                    Map<String, dynamic> args) {},
-                              ),
-                            ),
+                            // SizedBox(
+                            //   height: 60,
+                            //   width: MediaQuery.of(context).size.width,
+                            //   child: AdmobBanner(
+                            //     adUnitId: getBannerAdUnitId(),
+                            //     adSize: bannerSize,
+                            //     listener: (AdmobAdEvent event,
+                            //         Map<String, dynamic> args) {},
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),

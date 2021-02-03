@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import 'constants.dart';
+import '../constants.dart';
 
 class SliverCustomAppBarDelegate extends SliverPersistentHeaderDelegate {
 //  SliverCustomAppBarDelegate(this._tabBar);
