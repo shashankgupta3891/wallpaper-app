@@ -1,7 +1,7 @@
 # Wallpaper App
 <br>_The main purpose of this app is to learn implementation of WPGraphQL in Flutter. <br>
 It is a multi screen app with simple functionality but full-on custom styling.<br><br>_
-Download the app from [here](https://github.com/shashankgupta3891/wallpaper-app/blob/master/apk/app-arm64-v8a-release.apk).
+Download the app from [here](https://github.com/shashankgupta3891/wallpaper-app/raw/master/apk/app-arm64-v8a-release.apk).
 
 **Hope you guys will like this app ! Show some ❤️ and star the repo to support the project !**
 <br>
