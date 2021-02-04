@@ -1,12 +1,12 @@
-# BMI CALCULATOR
-<br>_This app is used to calculate the BMI value and corresponding weight status while taking age into consideration.<br>
+# Wallpaper App
+<br>_The main purpose of this app is to learn implementation of WPGraphQL in Flutter. <br>
 It is a multi screen app with simple functionality but full-on custom styling.<br><br>_
-Download the app from [here](https://github.com/shashankgupta3891/bmi-calculator-flutter/raw/main/bmiCalculatorApp.apk).
+Download the app from [here](https://github.com/shashankgupta3891/wallpaper-app/blob/master/apk/app-arm64-v8a-release.apk).
 
 **Hope you guys will like this app ! Show some ❤️ and star the repo to support the project !**
 <br>
 ## Screenshots
-<img src="https://github.com/shashankgupta3891/bmi-calculator-flutter/blob/main/images/readme/homePage.png?raw=true" width="200">|
+<img src="https://github.com/shashankgupta3891/wallpaper-app/blob/master/screenshots/WhatsApp%20Image%202021-02-04%20at%203.06.54%20PM%20(3).jpeg?raw=true" width="200">|
 <img src="https://github.com/shashankgupta3891/bmi-calculator-flutter/blob/main/images/readme/resultsPage.png?raw=true" width="200">|
 <img src="https://github.com/shashankgupta3891/bmi-calculator-flutter/blob/main/images/readme/devPage.jpeg?raw=true" width="200">|
 <img src="https://github.com/shashankgupta3891/bmi-calculator-flutter/blob/main/images/readme/drawer.png?raw=true" width="200">
