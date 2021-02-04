@@ -9,20 +9,13 @@ class InviteScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-//        title: Text("Hello"),
       ),
       backgroundColor: Colors.transparent,
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
-//        decoration: BoxDecoration(
-//            gradient: LinearGradient(colors: <Color>[
-//          Color(0xff074CA4),
-//          Color(0xff1AB5E6),
-//        ])),
         color: Colors.blue,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Card(
               shape: RoundedRectangleBorder(
@@ -30,7 +23,7 @@ class InviteScreen extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.all(10.0),
                 child: AutoSizeText(
-                  "Invite Your Network",
+                  "Share It Now 👌",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 35,
@@ -47,7 +40,7 @@ class InviteScreen extends StatelessWidget {
               ),
             ),
             AutoSizeText(
-              'Increase your network efficiency and grow you business',
+              'Share this app with your friends and family',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -66,8 +59,7 @@ class InviteScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 onPressed: () {
-                  Share.share(
-                      'Hey Friend, Try this wonderful app\n\nhttps://interntojob.com/index.php/work-from-home-jobs-at-amazon/1069/');
+                  Share.share('https://www.linkedin.com/in/shashankgupta3891/');
                 },
                 icon: Icon(
                   Icons.share,
