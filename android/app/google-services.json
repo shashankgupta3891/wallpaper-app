@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "985612902051",
+    "firebase_url": "https://new-try-38bce.firebaseio.com",
+    "project_id": "new-try-38bce",
+    "storage_bucket": "new-try-38bce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985612902051:android:0f6cd75f2992ba86d6a916",
+        "android_client_info": {
+          "package_name": "smartDevLabs.vestigePost"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "985612902051-6o2h2n7mbtup3lali1qe1mqfbgn5jkje.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDviArBypLPbQOmSbcoA4y1H-QI2T-DEGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "985612902051-ht819hse8s8eeo2nrresorjm9i1us4nh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
