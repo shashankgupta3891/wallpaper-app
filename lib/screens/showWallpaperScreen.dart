@@ -11,17 +11,17 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class WallpaperPageView extends StatefulWidget {
-  WallpaperPageView(
+class ShowWallpaperScreen extends StatefulWidget {
+  ShowWallpaperScreen(
       {this.pageNum, this.imageSrc, this.isLikedWallpaper = false});
   final List<dynamic> imageSrc;
   final int pageNum;
   final bool isLikedWallpaper;
   @override
-  _WallpaperPageViewState createState() => _WallpaperPageViewState();
+  _ShowWallpaperScreenState createState() => _ShowWallpaperScreenState();
 }
 
-class _WallpaperPageViewState extends State<WallpaperPageView> {
+class _ShowWallpaperScreenState extends State<ShowWallpaperScreen> {
   PageController _pageController;
   String imageLink;
   String result;

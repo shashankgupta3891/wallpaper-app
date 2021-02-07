@@ -24,7 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  device_apps: ^1.0.9
+#  device_apps: ^1.0.9
   esys_flutter_share: ^1.0.2
   wallpaper: ^1.0.3
   wallpaper_manager: "^1.0.7"

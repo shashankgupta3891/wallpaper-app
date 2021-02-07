@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../Components/wallpaperPageView.dart';
+import 'showWallpaperScreen.dart';
 
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -78,7 +78,7 @@ class _LikedImageScreenState extends State<LikedImageScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => WallpaperPageView(
+                            builder: (context) => ShowWallpaperScreen(
                               pageNum: index,
                               imageSrc: imageList,
                               isLikedWallpaper: true,

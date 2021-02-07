@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-import '../wallpaperPageView.dart';
+import '../../screens/showWallpaperScreen.dart';
 import '../appBarCurvePart.dart';
 
 class HomeScreenGrid extends StatefulWidget {
@@ -161,7 +161,7 @@ class _HomeScreenGridState extends State<HomeScreenGrid> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => WallpaperPageView(
+                                builder: (context) => ShowWallpaperScreen(
                                   pageNum: index,
                                   imageSrc: resultList,
                                 ),
