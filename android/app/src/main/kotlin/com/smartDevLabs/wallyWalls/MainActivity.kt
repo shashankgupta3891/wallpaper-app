@@ -1,4 +1,4 @@
-package smartDevLabs.vestigePost
+package com.smartDevLabs.wallyWalls
 
 import io.flutter.embedding.android.FlutterActivity
 

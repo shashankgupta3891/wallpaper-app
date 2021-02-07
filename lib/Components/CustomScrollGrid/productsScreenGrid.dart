@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import '../appBarCurvePart.dart';
 
-import '../wallpaperPageView.dart';
+import '../../screens/showWallpaperScreen.dart';
 
 class GridScreenByTagId extends StatefulWidget {
   final String tagId;
@@ -182,7 +182,7 @@ class _GridScreenByTagIdState extends State<GridScreenByTagId> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => WallpaperPageView(
+                                  builder: (context) => ShowWallpaperScreen(
                                     pageNum: index,
                                     imageSrc: resultList,
                                   ),

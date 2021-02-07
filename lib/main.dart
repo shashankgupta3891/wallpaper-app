@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
     );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Wallpaper App',
+      title: 'WallyWalls',
       theme: ThemeData(
         textTheme: GoogleFonts.openSansTextTheme(),
         primarySwatch: Colors.blue,

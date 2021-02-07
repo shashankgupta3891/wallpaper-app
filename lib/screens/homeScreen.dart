@@ -168,7 +168,6 @@ class _HomeScreenState extends State<HomeScreen> {
               body: TabsQueryWidget(
                 builder: (BuildContext context, resultData, _) {
                   List _tabs = resultData;
-                  print("hello123 ${_tabs.length}");
 
                   return DefaultTabController(
                     length: _tabs.length + 1, // This is the number of tabs.
@@ -204,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         0.02,
                                   ),
                                   Text(
-                                    'Wallpaper App',
+                                    'WallyWalls',
                                     style: TextStyle(fontSize: 22),
                                   ),
                                 ],

@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:985612902051:android:0f6cd75f2992ba86d6a916",
+        "mobilesdk_app_id": "1:985612902051:android:087f7397511b3e2fd6a916",
         "android_client_info": {
-          "package_name": "smartDevLabs.vestigePost"
+          "package_name": "com.smartDevLabs.wallyWalls"
         }
       },
       "oauth_client": [
@@ -28,7 +28,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "985612902051-ht819hse8s8eeo2nrresorjm9i1us4nh.apps.googleusercontent.com",
+              "client_id": "985612902051-6o2h2n7mbtup3lali1qe1mqfbgn5jkje.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
